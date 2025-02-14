@@ -2,12 +2,26 @@
 
 import Image from "next/image";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+    const [token, setToken] = useState(null);
     useEffect(() => {
         require("bootstrap/dist/js/bootstrap.bundle.min.js");
+
+        fetch('http://80.75.218.175:110/api/auth/GetToken')
+            .then(res => res.json())
+            .then(data => {
+                if (data.token) {
+                    setToken(data.token);
+                }
+            })
+            .catch(error => console.error('Fehler:', error));
     }, []);
+
+    //  useState(() => {
+    //
+    //  }, []);
 
     return (
         <div className="container mt-4">
