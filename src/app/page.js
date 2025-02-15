@@ -6,22 +6,27 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
     const [token, setToken] = useState(null);
+
     useEffect(() => {
-        require("bootstrap/dist/js/bootstrap.bundle.min.js");
+        import("bootstrap/dist/js/bootstrap.bundle.min.js");
 
-        fetch('http://80.75.218.175:110/api/auth/GetToken')
-            .then(res => res.json())
-            .then(data => {
-                if (data.token) {
-                    setToken(data.token);
+        const fetchToken = async () => {
+            try {
+                const response = await fetch('http://80.75.218.175:8080/api/auth/GetToken');
+                const text = await response.text();
+                const cleanToken = text.replace(/^"|"$/g, '');
+
+                if (cleanToken) {
+                    setToken(cleanToken);
+                    console.log('Token:', cleanToken);
                 }
-            })
-            .catch(error => console.error('Fehler:', error));
-    }, []);
+            } catch (error) {
+                console.error('Fehler beim Abrufen des Tokens:', error);
+            }
+        };
 
-    //  useState(() => {
-    //
-    //  }, []);
+        fetchToken();
+    }, []);
 
     return (
         <div className="container mt-4">
