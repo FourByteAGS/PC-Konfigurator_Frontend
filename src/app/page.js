@@ -36,13 +36,19 @@ export default function Home() {
                 const baseUrl = "http://80.75.218.175:8080/api/";
                 const url = new URL(`${baseUrl}${apiFunction}${token}`);
 
-                const response = await fetch(
-                    url.toString()
-                );
+                const response = await fetch(url.toString());
+
+                if (!response.ok) {
+                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+                }
 
                 const data = await response.json();
                 console.log('data:', data);
-                selectedProductList(data); // Speichert die Daten im State
+                // Falls das JSON-Objekt eine Liste enthält
+                let productsArray = Array.isArray(data) ? data : Object.values(data);
+
+                console.log('array:', productsArray);
+                selectedProductList(productsArray); // Speichert die Daten im State
             } catch (error) {
                 console.error('Fehler beim Abrufen des Komponenten:', error);
             }
@@ -60,8 +66,6 @@ export default function Home() {
         if (filterValues == activeFilter) {
             return;
         }
-
-
 
         try {
             const response = await fetch(
