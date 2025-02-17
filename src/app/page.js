@@ -17,11 +17,11 @@ export default function Home() {
             try {
                 const response = await fetch('http://80.75.218.175:8080/api/auth/GetToken');
                 const text = await response.text();
-                const cleanToken = text.replace(/^"|"$/g, '');
+                const cleanToken = text.replace(/^"|"$/g, ''); // Entfernt Anführungszeichen, falls vorhanden
 
                 if (cleanToken) {
                     setToken(cleanToken);
-                    console.log('Token:', cleanToken);
+                    console.log('Token empfangen:', cleanToken);
                 }
             } catch (error) {
                 console.error('Fehler beim Abrufen des Tokens:', error);
@@ -29,12 +29,16 @@ export default function Home() {
         };
 
         fetchToken();
+    }, []); // Läuft nur beim ersten Rendern
+
+    useEffect(() => {
+        if (!token) return; // Wartet auf das Token, bevor die Produkte geladen werden
 
         const getSelectedProducts = async () => {
             try {
                 const apiFunction = "getAllSelected";
                 const baseUrl = "http://80.75.218.175:8080/api/";
-                const url = new URL(`${baseUrl}${apiFunction}${token}`);
+                const url = new URL(`${baseUrl}${apiFunction}?token=${token}`);
 
                 const response = await fetch(url.toString());
 
@@ -43,19 +47,20 @@ export default function Home() {
                 }
 
                 const data = await response.json();
-                console.log('data:', data);
+                console.log('Daten erhalten:', data);
+
                 // Falls das JSON-Objekt eine Liste enthält
                 let productsArray = Array.isArray(data) ? data : Object.values(data);
 
-                console.log('array:', productsArray);
-                selectedProductList(productsArray); // Speichert die Daten im State
+                console.log('Umgewandeltes Array:', productsArray);
+                setSelectedProductList(productsArray); // Speichert die Daten im State
             } catch (error) {
-                console.error('Fehler beim Abrufen des Komponenten:', error);
+                console.error('Fehler beim Abrufen der Komponenten:', error);
             }
         };
 
         getSelectedProducts();
-    }, []);
+    }, [token]); // Wird erneut ausgeführt, wenn sich `token` ändert
 
 
     const getHardwareData = async (hardware, apiFunction, token, filterValues) => {
