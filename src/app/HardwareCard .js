@@ -1,27 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 
-const HardwareCard = ({ data }) => {
+const selectedTower = async (hardware, apiFunction, token, filterValues) => {
+    const baseUrl = "http://80.75.218.175:8080/api/";
+    const url = new URL(`${baseUrl}${hardware}${apiFunction}${token}${filterValues}`);
+
+    try {
+        const response = await fetch(url.toString());
+        if (!response.ok) {
+            throw new Error("Fehler beim Abrufen der Daten");
+        }
+        const data = await response.json();
+        console.log("Erfolgreich ausgewählt:", data);
+        return data;
+    } catch (error) {
+        console.error("API Fehler:", error);
+        return null;
+    }
+};
+
+const HardwareCard = ({ data, token }) => {
+    const [selectedId, setSelectedId] = useState(null);
+
     if (!data || data.length === 0) {
         return <p>Keine Daten geladen</p>;
     }
 
+    const handleSelect = async (id) => {
+        setSelectedId(id);
+        await selectedTower("tower/", "setcomponent?", "token=" + token, "&" + id);
+    };
+
     return (
-        <div className="row">
-            {data.map((item, index) => (
-                <div key={index} className="col-md-4 mb-3">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">{item.name || "Kein Name"}</h5>
-                            <p className="card-text">
-                                <strong>Preis:</strong> {item.price ? `${item.price} €` : "N/A"}
-                            </p>
-                            <p className="card-text">
-                                <strong>Hersteller:</strong> {item.manufacturer || "Unbekannt"}
-                            </p>
-                            <p className="card-text">
-                                <strong>Typ:</strong> {item.type || "N/A"}
-                            </p>
-                        </div>
+        <div className="hardware-container">
+            {data.map((item) => (
+                <div
+                    key={item.id || item.name}
+                    className={`hardware-card ${selectedId === item.id ? "selected" : ""}`}
+                    onClick={() => handleSelect(item.id)}
+                    role="button"
+                >
+                    {/* Bild */}
+                    <div className="hardware-image">
+                        {item.image ? (
+                            <Image
+                                src={item.image}
+                                alt={item.name || "Produktbild"}
+                                width={150}
+                                height={150}
+                                style={{ objectFit: "cover", borderRadius: "8px" }}
+                            />
+                        ) : (
+                            <p>Kein Bild verfügbar</p>
+                        )}
+                    </div>
+
+                    {/* Infos */}
+                    <div className="hardware-info">
+                        <h5>{item.name || "Kein Name"}</h5>
+                        <p><strong>Preis:</strong> {item.price ? `${item.price} €` : "N/A"}</p>
+                        <p><strong>Hersteller:</strong> {item.manufacturer || "Unbekannt"}</p>
+                        <p><strong>Typ:</strong> {item.towerType || "N/A"}</p>
                     </div>
                 </div>
             ))}
