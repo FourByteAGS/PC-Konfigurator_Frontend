@@ -3,9 +3,13 @@
 import Image from "next/image";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
+import HardwareCard from "./HardwareCard";
 
 export default function Home() {
     const [token, setToken] = useState(null);
+    const [hardwareData, setHardwareData] = useState(null);
+    const newProducts = null;
+    const selectedProducts = null;
 
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -27,6 +31,27 @@ export default function Home() {
 
         fetchToken();
     }, []);
+
+
+    const getHardwareData = async (hardware, apiFunction, token, filterValues) => {
+        const baseUrl = "http://80.75.218.175:8080/api/";
+        const url = new URL(`${baseUrl}${hardware}${apiFunction}${token}${filterValues}`);
+
+        try {
+            const response = await fetch(
+                url.toString()
+            );
+            if (!response.ok) {
+                throw new Error("Fehler beim Abrufen der Daten");
+            }
+            const data = await response.json();
+            setHardwareData(data); // Speichert die Daten im State
+            console.log("Hardware-Daten:", data);
+        } catch (error) {
+            console.error("API Fehler:", error);
+            return null;
+        }
+    };
 
     return (
         <div className="container mt-4">
@@ -61,14 +86,14 @@ export default function Home() {
 
                                         {/* ATX */}
                                         <div className="card mb-2">
-                                            <div className="card-header" data-bs-toggle="collapse"
+                                            <div onClick={() => getHardwareData("tower/", "GetTowerByFormFactor?", "token=" + token, "&formFactor=MICRO_ATX")} className="card-header" data-bs-toggle="collapse"
                                                 data-bs-target="#collapseATX"
                                                 style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
                                                 ATX
                                             </div>
                                             <div className="collapse" id="collapseATX">
                                                 <div className="card-body">
-
+                                                    <HardwareCard data={hardwareData} />
                                                 </div>
                                             </div>
                                         </div>
