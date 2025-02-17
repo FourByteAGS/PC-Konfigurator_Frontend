@@ -53,7 +53,7 @@ export default function Home() {
                 let productsArray = Array.isArray(data) ? data : Object.values(data);
 
                 console.log('Umgewandeltes Array:', productsArray);
-                setSelectedProductList(productsArray); // Speichert die Daten im State
+                selectedProductList(productsArray); // Speichert die Daten im State
             } catch (error) {
                 console.error('Fehler beim Abrufen der Komponenten:', error);
             }

@@ -22,9 +22,9 @@ const ComponentList = ({ components = [] }) => {
                                 <tr key={index}>
                                     <td>
                                         <div className="komp-text">
-                                            <strong>{comp.name}: </strong>
+                                            <strong>{comp.category}: </strong>
                                         </div>
-                                        <div className="desc-text">{comp.description || "-"}</div>
+                                        <div className="desc-text">{comp.name || "-"}</div>
                                     </td>
                                     <td className="komp-text">
                                         <div>&nbsp;</div>
