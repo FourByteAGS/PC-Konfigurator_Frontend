@@ -2,8 +2,7 @@ import React from "react";
 
 const ComponentList = ({ components = [] }) => {
     if (!Array.isArray(components)) {
-        console.error("components muss ein Array sein!", components);
-        return <p>Fehler: Ungültige Daten.</p>;
+        return;
     }
 
     return (

@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { getSelectedProducts } from "./apiService";
 
 const selectedTower = async (hardware, apiFunction, token, filterValues) => {
     const baseUrl = "http://80.75.218.175:8080/api/";
-    const url = new URL(`${baseUrl}${hardware}${apiFunction}${token}${filterValues}`);
+    const url = new URL(`${baseUrl}${hardware}${apiFunction}?token=${token}${filterValues}`);
 
     try {
         const response = await fetch(url.toString());
         if (!response.ok) {
             throw new Error("Fehler beim Abrufen der Daten");
         }
-
-
     } catch (error) {
         console.error("API Fehler:", error);
         return null;
     }
 };
 
-const TowerCard = ({ data, token }) => {
+const TowerCard = ({ data, token, setData }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     if (!data || data.length === 0) {
@@ -30,8 +29,12 @@ const TowerCard = ({ data, token }) => {
         setSelectedId(newSelectedId);
 
         if (newSelectedId) {
-            await selectedTower("tower/", "setcomponent?", "token=" + token, "&componentId=" + id);
+            await selectedTower("tower/", "setcomponent", token, "&componentId=" + id);
         }
+
+        //`getSelectedProducts` aus apiService aufrufen und den State aktualisieren
+        const updatedProducts = await getSelectedProducts(token);
+        setData(updatedProducts); // Aktualisiert die Daten nach der API-Abfrage
     };
 
     return (
