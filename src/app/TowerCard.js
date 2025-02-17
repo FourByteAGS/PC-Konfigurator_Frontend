@@ -32,9 +32,14 @@ const TowerCard = ({ data, token, setData }) => {
             await selectedTower("tower/", "setcomponent", token, "&componentId=" + id);
         }
 
-        //`getSelectedProducts` aus apiService aufrufen und den State aktualisieren
+        // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren
         const updatedProducts = await getSelectedProducts(token);
-        setData(updatedProducts); // Aktualisiert die Daten nach der API-Abfrage
+
+        if (typeof setData === "function") {
+            setData(updatedProducts);
+        } else {
+            console.error("Fehler: setData ist keine Funktion!");
+        }
     };
 
     return (
@@ -46,7 +51,6 @@ const TowerCard = ({ data, token, setData }) => {
                     onClick={() => handleSelect(item.id)}
                     role="button"
                 >
-                    {/* Bild */}
                     <div className="hardware-image">
                         {item.image ? (
                             <Image
@@ -61,7 +65,6 @@ const TowerCard = ({ data, token, setData }) => {
                         )}
                     </div>
 
-                    {/* Infos */}
                     <div className="hardware-info">
                         <h5>{item.name || "Kein Name"}</h5>
                         <p><strong>Preis:</strong> {item.price ? `${item.price} €` : "N/A"}</p>

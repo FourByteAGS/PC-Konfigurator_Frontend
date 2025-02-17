@@ -1,5 +1,5 @@
-export const getSelectedProducts = async (token: string) => {
-    if (!token) return;
+export const getSelectedProducts = async (token) => {
+    if (!token) return [];
 
     try {
         const apiFunction = "getAllSelected";
@@ -21,3 +21,4 @@ export const getSelectedProducts = async (token: string) => {
         return [];
     }
 };
+

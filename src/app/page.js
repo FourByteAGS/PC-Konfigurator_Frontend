@@ -130,7 +130,7 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseATX">
                                                 <div className="card-body">
-                                                    <TowerCard data={hardwareData} token={token} />
+                                                    <TowerCard data={hardwareData} token={token} setData={selectedProductList} />
                                                 </div>
                                             </div>
                                         </div>
@@ -145,7 +145,7 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseMicroATX">
                                                 <div className="card-body">
-                                                    <TowerCard data={hardwareData} token={token} />
+                                                    <TowerCard data={hardwareData} token={token} setData={selectedProductList} />
                                                 </div>
                                             </div>
                                         </div>
@@ -160,7 +160,7 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseMiniATX">
                                                 <div className="card-body">
-                                                    <TowerCard data={hardwareData} token={token} />
+                                                    <TowerCard data={hardwareData} token={token} setData={selectedProductList} />
                                                 </div>
                                             </div>
                                         </div>
