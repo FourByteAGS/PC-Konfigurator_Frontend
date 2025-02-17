@@ -10,16 +10,15 @@ const selectedTower = async (hardware, apiFunction, token, filterValues) => {
         if (!response.ok) {
             throw new Error("Fehler beim Abrufen der Daten");
         }
-        const data = await response.json();
-        console.log("Erfolgreich ausgewählt:", data);
-        return data;
+
+
     } catch (error) {
         console.error("API Fehler:", error);
         return null;
     }
 };
 
-const HardwareCard = ({ data, token }) => {
+const TowerCard = ({ data, token }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     if (!data || data.length === 0) {
@@ -27,8 +26,12 @@ const HardwareCard = ({ data, token }) => {
     }
 
     const handleSelect = async (id) => {
-        setSelectedId(id);
-        await selectedTower("tower/", "setcomponent?", "token=" + token, "&" + id);
+        const newSelectedId = selectedId === id ? null : id;
+        setSelectedId(newSelectedId);
+
+        if (newSelectedId) {
+            await selectedTower("tower/", "setcomponent?", "token=" + token, "&componentId=" + id);
+        }
     };
 
     return (
@@ -68,4 +71,4 @@ const HardwareCard = ({ data, token }) => {
     );
 };
 
-export default HardwareCard;
+export default TowerCard;

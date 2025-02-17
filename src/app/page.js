@@ -1,13 +1,14 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import HardwareCard from "@/app/HardwareCard ";
+import TowerCard from "@/app/TowerCard";
+import ComponentList from "@/app/ComponentList";
 
 export default function Home() {
     const [token, setToken] = useState(null);
     const [hardwareData, setHardwareData] = useState(null);
     const [activeFilter, setFilterValues] = useState(null);
-    const selectedProducts = null;
+    const [selectedProducts, selectedProductList] = useState(null);
 
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -28,6 +29,26 @@ export default function Home() {
         };
 
         fetchToken();
+
+        const getSelectedProducts = async () => {
+            try {
+                const apiFunction = "getAllSelected";
+                const baseUrl = "http://80.75.218.175:8080/api/";
+                const url = new URL(`${baseUrl}${apiFunction}${token}`);
+
+                const response = await fetch(
+                    url.toString()
+                );
+
+                const data = await response.json();
+                console.log('data:', data);
+                selectedProductList(data); // Speichert die Daten im State
+            } catch (error) {
+                console.error('Fehler beim Abrufen des Komponenten:', error);
+            }
+        };
+
+        getSelectedProducts();
     }, []);
 
 
@@ -100,7 +121,7 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseATX">
                                                 <div className="card-body">
-                                                    <HardwareCard data={hardwareData} token={token} />
+                                                    <TowerCard data={hardwareData} token={token} />
                                                 </div>
                                             </div>
                                         </div>
@@ -115,7 +136,7 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseMicroATX">
                                                 <div className="card-body">
-                                                    <HardwareCard data={hardwareData} />
+                                                    <TowerCard data={hardwareData} token={token} />
                                                 </div>
                                             </div>
                                         </div>
@@ -130,7 +151,7 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseMiniATX">
                                                 <div className="card-body">
-                                                    <HardwareCard data={hardwareData} />
+                                                    <TowerCard data={hardwareData} token={token} />
                                                 </div>
                                             </div>
                                         </div>
@@ -366,110 +387,8 @@ export default function Home() {
                             </div>
                             <hr />
                             <div>
-                                <div className="row">
-                                    <div className="col">
-                                        <table className="table">
-                                            <thead className="table-light">
-                                                <tr>
-                                                    <th>Komponenten</th>
-                                                    <th>Preis</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Gehäuse: </strong></div>
-                                                        <div className="desc-text">Lian Li 500404 Bla</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">99€</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Prozessor: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Mainboard: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Prozessorkühler: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>RAM: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Grafikkarte: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Datenträger: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Gehäuselüfter: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div className="komp-text"><strong>Netzteil: </strong></div>
-                                                        <div className="desc-text">&nbsp;</div>
-                                                    </td>
-                                                    <td className=" komp-text">
-                                                        <div>&nbsp;</div>
-                                                        <div className="desc-text">-</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                <ComponentList components={selectedProducts} />
+
                             </div>
                             <hr />
                             <div>
