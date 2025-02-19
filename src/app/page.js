@@ -5,6 +5,12 @@ import TowerCard from "./components/TowerCard";
 import CPUCard from "./components/CPUCard";
 import ComponentList from "./components/ComponentList";
 import { fetchToken, fetchSelectedProducts, fetchHardwareData } from './services/apiService';
+import MotherboardCard from "./components/MotherboardCard";
+import CPUCoolerCard from "./components/CPUCoolerCard";
+import GPUCard from "./components/GPUCard";
+import StorageCard from "./components/DatenträgerCard";
+import FanCard from "./components/CPUCoolerCard";
+import PowerSupplyCard from "./components/PowerCard";
 
 export default function Home() {
     const [token, setToken] = useState(null);
@@ -17,6 +23,30 @@ export default function Home() {
         cpu: {
             INTEL: null,
             AMD: null
+        },
+        motherboard: {
+            ATX: null,
+            MICRO_ATX: null,
+            MINI_ATX: null
+        },
+        cpuCooler: {
+            AIR: null,
+            WATER: null
+        },
+        gpu: {
+            NVIDIA: null,
+            AMD: null
+        },
+        storage: {
+            SSD: null,
+            HDD: null,
+            M2: null
+        },
+        fan: {
+            ALL: null
+        },
+        powerSupply: {
+            ALL: null
         }
     });
     const [selectedProducts, selectedProductList] = useState(null);
@@ -288,7 +318,34 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapseMainboard">
                                     <div className="card-body">
+                                        {/* ATX */}
+                                        <div className="card mb-2">
+                                            <div
+                                                onClick={() => getHardwareData(
+                                                    "mainboard/", 
+                                                    "GetAll?", 
+                                                    "token=" + token, 
+                                                    "&formFactor=ATX",
+                                                    "mainboard",
+                                                    "ATX"
+                                                )}
+                                                className="card-header" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseMainboardATX"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                ATX
+                                            </div>
+                                            <div className="collapse" id="collapseMainboardATX">
+                                                <div className="card-body">
+                                                    <MotherboardCard 
+                                                        data={hardwareStates.mainboard} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        {/* Weitere Mainboard-Formate analog */}
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +371,34 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapseCPUCooler">
                                     <div className="card-body">
+                                        {/* Luftkühlung */}
+                                        <div className="card mb-2">
+                                            <div
+                                                onClick={() => getHardwareData(
+                                                    "cpuCooler/", 
+                                                    "GetAll?", 
+                                                    "token=" + token, 
+                                                    "&type=AIR",
+                                                    "cpuCooler",
+                                                    "AIR"
+                                                )}
+                                                className="card-header" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseAirCooler"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                Luftkühlung
+                                            </div>
+                                            <div className="collapse" id="collapseAirCooler">
+                                                <div className="card-body">
+                                                    <CPUCoolerCard 
+                                                        data={hardwareStates.cpuCooler.AIR} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        {/* Wasserkühlung analog */}
                                     </div>
                                 </div>
                             </div>
@@ -368,7 +452,34 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapseGPU">
                                     <div className="card-body">
+                                        {/* NVIDIA */}
+                                        <div className="card mb-2">
+                                            <div
+                                                onClick={() => getHardwareData(
+                                                    "gpu/", 
+                                                    "GetAll?", 
+                                                    "token=" + token, 
+                                                    "&manufacturer=NVIDIA",
+                                                    "gpu",
+                                                    "NVIDIA"
+                                                )}
+                                                className="card-header" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseNVIDIA"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                NVIDIA
+                                            </div>
+                                            <div className="collapse" id="collapseNVIDIA">
+                                                <div className="card-body">
+                                                    <GPUCard 
+                                                        data={hardwareStates.gpu.NVIDIA} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        {/* AMD GPU analog */}
                                     </div>
                                 </div>
                             </div>
@@ -396,7 +507,34 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapseDatadrive">
                                     <div className="card-body">
+                                        {/* SSD */}
+                                        <div className="card mb-2">
+                                            <div
+                                                onClick={() => getHardwareData(
+                                                    "storage/", 
+                                                    "GetAll?", 
+                                                    "token=" + token, 
+                                                    "&type=SSD",
+                                                    "storage",
+                                                    "SSD"
+                                                )}
+                                                className="card-header" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseSSD"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                SSD
+                                            </div>
+                                            <div className="collapse" id="collapseSSD">
+                                                <div className="card-body">
+                                                    <StorageCard 
+                                                        data={hardwareStates.storage.SSD} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        {/* HDD und M.2 analog */}
                                     </div>
                                 </div>
                             </div>
@@ -423,7 +561,31 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapseFan">
                                     <div className="card-body">
-
+                                        <div className="card">
+                                            <div
+                                                onClick={() => getHardwareData(
+                                                    "fan/", 
+                                                    "GetAll?", 
+                                                    "token=" + token, 
+                                                    "",
+                                                    "fan",
+                                                    "ALL"
+                                                )}
+                                                className="card-header" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseFanAll"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                Alle Lüfter
+                                            </div>
+                                            <div className="collapse" id="collapseFanAll">
+                                                <div className="card-body">
+                                                    <FanCard 
+                                                        data={hardwareStates.fan.ALL} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -448,7 +610,31 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapsePower">
                                     <div className="card-body">
-
+                                        <div className="card">
+                                            <div
+                                                onClick={() => getHardwareData(
+                                                    "powerSupply/", 
+                                                    "GetAll?", 
+                                                    "token=" + token, 
+                                                    "",
+                                                    "powerSupply",
+                                                    "ALL"
+                                                )}
+                                                className="card-header" data-bs-toggle="collapse"
+                                                data-bs-target="#collapsePowerAll"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                Alle Netzteile
+                                            </div>
+                                            <div className="collapse" id="collapsePowerAll">
+                                                <div className="card-body">
+                                                    <PowerSupplyCard 
+                                                        data={hardwareStates.powerSupply.ALL} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
