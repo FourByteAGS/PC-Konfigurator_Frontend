@@ -312,9 +312,9 @@ export default function Home() {
                         onClick={() =>
                           getHardwareData(
                             "cpu/",
-                            "GetAll?",
+                            "getbymanifacture?",
                             "token=" + token,
-                            "&manufacturer=INTEL",
+                            "&manifacture=INTEL",
                             "cpu",
                             "INTEL"
                           )
@@ -346,9 +346,9 @@ export default function Home() {
                         onClick={() =>
                           getHardwareData(
                             "cpu/",
-                            "GetAll?",
+                            "getbymanifacture?",
                             "token=" + token,
-                            "&manufacturer=AMD",
+                            "&manifacture=AMD",
                             "cpu",
                             "AMD"
                           )
@@ -461,9 +461,9 @@ export default function Home() {
                         onClick={() =>
                           getHardwareData(
                             "cpufan/",
-                            "GetAll?",
+                            "getbyheatpipes?",
                             "token=" + token,
-                            "",
+                            "&isLiquid=false",
                             "cpuCooler",
                             "AIR"
                           )
@@ -490,6 +490,39 @@ export default function Home() {
                     </div>
 
                     {/* Wasserkühlung analog */}
+
+                    <div className="card mb-2">
+                      <div
+                        onClick={() =>
+                          getHardwareData(
+                            "cpufan/",
+                            "getbyheatpipes?",
+                            "token=" + token,
+                            "&isLiquid=true",
+                            "cpuCooler",
+                            "WATER"
+                          )
+                        }
+                        className="card-header"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseWaterCooler"
+                        style={{
+                          borderRadius: "5px",
+                          borderColor: "lightgrey",
+                        }}
+                      >
+                        Wasserkühlung
+                      </div>
+                      <div className="collapse" id="collapseWaterCooler">
+                        <div className="card-body">
+                          <CPUCoolerCard
+                            data={hardwareStates.cpuCooler.WATER}
+                            token={token}
+                            setData={selectedProductList}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
