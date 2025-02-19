@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { getSelectedProducts } from "../services/apiService";
 
 const selectedGPU = async (hardware, apiFunction, token, filterValues) => {
   const baseUrl = "http://80.75.218.175:8080/api/";
@@ -18,7 +19,7 @@ const selectedGPU = async (hardware, apiFunction, token, filterValues) => {
   }
 };
 
-const GPUCard = ({ data, token }) => {
+const GPUCard = ({ data, token, setData }) => {
   const [selectedId, setSelectedId] = useState(null);
 
   if (!data || data.length === 0) {
@@ -37,6 +38,14 @@ const GPUCard = ({ data, token }) => {
         "&componentId=" + id
       );
     }
+    // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren
+    const updatedProducts = await getSelectedProducts(token);
+
+    if (typeof setData === "function") {
+      setData(updatedProducts);
+    } else {
+      console.error("Fehler: setData ist keine Funktion!");
+    }
   };
 
   return (
@@ -44,9 +53,8 @@ const GPUCard = ({ data, token }) => {
       {data.map((item) => (
         <div
           key={item.id || item.name}
-          className={`hardware-card ${
-            selectedId === item.id ? "selected" : ""
-          }`}
+          className={`hardware-card ${selectedId === item.id ? "selected" : ""
+            }`}
           onClick={() => handleSelect(item.id)}
           role="button"
         >

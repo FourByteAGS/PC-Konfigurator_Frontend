@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { getSelectedProducts } from "../services/apiService";
 
 const selectedCPU = async (hardware, apiFunction, token, filterValues) => {
     const baseUrl = "http://80.75.218.175:8080/api/";
@@ -18,7 +19,7 @@ const selectedCPU = async (hardware, apiFunction, token, filterValues) => {
     }
 };
 
-const CPUCard = ({ data, token }) => {
+const CPUCard = ({ data, token, setData }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     if (!data || data.length === 0) {
@@ -31,6 +32,15 @@ const CPUCard = ({ data, token }) => {
 
         if (newSelectedId) {
             await selectedCPU("cpu/", "setcomponent?", "token=" + token, "&componentId=" + id);
+        }
+
+        // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren
+        const updatedProducts = await getSelectedProducts(token);
+
+        if (typeof setData === "function") {
+            setData(updatedProducts);
+        } else {
+            console.error("Fehler: setData ist keine Funktion!");
         }
     };
 

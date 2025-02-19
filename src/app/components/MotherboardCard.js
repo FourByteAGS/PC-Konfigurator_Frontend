@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { getSelectedProducts } from "../services/apiService";
 
 const selectedMotherboard = async (
   hardware,
@@ -23,7 +24,7 @@ const selectedMotherboard = async (
   }
 };
 
-const MotherboardCard = ({ data, token }) => {
+const MotherboardCard = ({ data, token, setData }) => {
   const [selectedId, setSelectedId] = useState(null);
 
   if (!data || data.length === 0) {
@@ -42,6 +43,15 @@ const MotherboardCard = ({ data, token }) => {
         "&componentId=" + id
       );
     }
+
+    // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren
+    const updatedProducts = await getSelectedProducts(token);
+
+    if (typeof setData === "function") {
+      setData(updatedProducts);
+    } else {
+      console.error("Fehler: setData ist keine Funktion!");
+    }
   };
 
   return (
@@ -49,9 +59,8 @@ const MotherboardCard = ({ data, token }) => {
       {data.map((item) => (
         <div
           key={item.id || item.name}
-          className={`hardware-card ${
-            selectedId === item.id ? "selected" : ""
-          }`}
+          className={`hardware-card ${selectedId === item.id ? "selected" : ""
+            }`}
           onClick={() => handleSelect(item.id)}
           role="button"
         >
