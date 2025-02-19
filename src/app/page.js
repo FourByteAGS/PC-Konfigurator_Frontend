@@ -123,6 +123,18 @@ export default function Home() {
     }
   };
 
+  const calculateTotalPrice = (items) => {
+    if (!items || items.length === 0) {
+      return 0;
+    }
+
+    const total = items.reduce((sum, item) => {
+      return sum + (item.price ? parseFloat(item.price) : 0);
+    }, 0);
+
+    return `Gesamtpreis: ${total.toFixed(2)} €`;
+  };
+
   console.log("GAY ", hardwareStates);
 
   return (
@@ -817,7 +829,7 @@ export default function Home() {
               </div>
               <hr />
               <div>
-                <strong>Endpreis:</strong>
+                <strong>{calculateTotalPrice(selectedProducts)}</strong>
               </div>
             </div>
           </div>
