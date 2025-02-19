@@ -1,9 +1,10 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import TowerCard from "./TowerCard";
-import CPUCard from "./CPUCard";
-import ComponentList from "./ComponentList";
+import TowerCard from "./components/TowerCard";
+import CPUCard from "./components/CPUCard";
+import ComponentList from "./components/ComponentList";
+import { fetchToken, fetchSelectedProducts, fetchHardwareData } from './services/apiService';
 
 export default function Home() {
     const [token, setToken] = useState(null);
@@ -23,12 +24,9 @@ export default function Home() {
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap.bundle.min.js");
 
-        const fetchToken = async () => {
+        const initToken = async () => {
             try {
-                const response = await fetch('http://80.75.218.175:8080/api/auth/GetToken');
-                const text = await response.text();
-                const cleanToken = text.replace(/^"|"$/g, ''); // Entfernt Anführungszeichen, falls vorhanden
-
+                const cleanToken = await fetchToken();
                 if (cleanToken) {
                     setToken(cleanToken);
                     console.log('Token empfangen:', cleanToken);
@@ -38,53 +36,29 @@ export default function Home() {
             }
         };
 
-        fetchToken();
-    }, []); // Läuft nur beim ersten Rendern
+        initToken();
+    }, []);
 
     useEffect(() => {
-        if (!token) return; // Wartet auf das Token, bevor die Produkte geladen werden
+        if (!token) return;
 
-        const getSelectedProducts = async () => {
+        const loadSelectedProducts = async () => {
             try {
-                const apiFunction = "getAllSelected";
-                const baseUrl = "http://80.75.218.175:8080/api/";
-                const url = new URL(`${baseUrl}${apiFunction}?token=${token}`);
-
-                const response = await fetch(url.toString());
-
-                if (!response.ok) {
-                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Daten erhalten:', data);
-
-                // Falls das JSON-Objekt eine Liste enthält
-                let productsArray = Array.isArray(data) ? data : Object.values(data);
-
+                const productsArray = await fetchSelectedProducts(token);
                 console.log('Umgewandeltes Array:', productsArray);
-                selectedProductList(productsArray); // Speichert die Daten im State
+                selectedProductList(productsArray);
             } catch (error) {
                 console.error('Fehler beim Abrufen der Komponenten:', error);
             }
         };
 
-        getSelectedProducts();
-    }, [token]); // Wird erneut ausgeführt, wenn sich `token` ändert
-
+        loadSelectedProducts();
+    }, [token]);
 
     const getHardwareData = async (hardware, apiFunction, token, filterValues, category, subCategory) => {
-        const baseUrl = "http://80.75.218.175:8080/api/";
-        const url = new URL(`${baseUrl}${hardware}${apiFunction}${token}${filterValues}`);
-
         try {
-            const response = await fetch(url.toString());
-            if (!response.ok) {
-                throw new Error("Fehler beim Abrufen der Daten");
-            }
-            const data = await response.json();
+            const data = await fetchHardwareData(hardware, apiFunction, token, filterValues, category, subCategory);
             
-            // Update nur die spezifische Kategorie und Unterkategorie
             setHardwareStates(prevState => ({
                 ...prevState,
                 [category]: {
@@ -96,7 +70,6 @@ export default function Home() {
             console.log("Hardware-Daten:", data);
         } catch (error) {
             console.error("API Fehler:", error);
-            return null;
         }
     };
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { getSelectedProducts } from "./apiService";
+import { getSelectedProducts } from "../services/apiService";
 
 const selectedTower = async (hardware, apiFunction, token, filterValues) => {
     const baseUrl = "http://80.75.218.175:8080/api/";
