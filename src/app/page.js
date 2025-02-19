@@ -862,8 +862,9 @@ export default function Home() {
               <div className="row">
                 <div className="col-4">
                   <img
-                    src="https://gzhls.at/i/60/05/3326005-n0.jpg"
+                    src={selectedProducts && selectedProducts.find(product => product.category === 'Gehäuse')?.image || "https://gzhls.at/i/60/05/3326005-n0.jpg"}
                     width="80"
+                    alt="PC Gehäuse"
                   />
                 </div>
                 <div className="col-8 d-flex justify-content-center align-items-center">
