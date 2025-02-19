@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-const selectedTower = async (hardware, apiFunction, token, filterValues) => {
+const selectedCPU = async (hardware, apiFunction, token, filterValues) => {
     const baseUrl = "http://80.75.218.175:8080/api/";
     const url = new URL(`${baseUrl}${hardware}${apiFunction}${token}${filterValues}`);
 
@@ -18,7 +18,7 @@ const selectedTower = async (hardware, apiFunction, token, filterValues) => {
     }
 };
 
-const TowerCard = ({ data, token }) => {
+const CPUCard = ({ data, token }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     if (!data || data.length === 0) {
@@ -30,7 +30,7 @@ const TowerCard = ({ data, token }) => {
         setSelectedId(newSelectedId);
 
         if (newSelectedId) {
-            await selectedTower("tower/", "setcomponent?", "token=" + token, "&componentId=" + id);
+            await selectedCPU("cpu/", "setcomponent?", "token=" + token, "&componentId=" + id);
         }
     };
 
@@ -71,4 +71,4 @@ const TowerCard = ({ data, token }) => {
     );
 };
 
-export default TowerCard;
+export default CPUCard;

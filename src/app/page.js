@@ -1,13 +1,23 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import TowerCard from "@/app/TowerCard";
-import ComponentList from "@/app/ComponentList";
+import TowerCard from "./TowerCard";
+import CPUCard from "./CPUCard";
+import ComponentList from "./ComponentList";
 
 export default function Home() {
     const [token, setToken] = useState(null);
-    const [hardwareData, setHardwareData] = useState(null);
-    const [activeFilter, setFilterValues] = useState(null);
+    const [hardwareStates, setHardwareStates] = useState({
+        tower: {
+            ATX: null,
+            MICRO_ATX: null,
+            MINI_ATX: null
+        },
+        cpu: {
+            INTEL: null,
+            AMD: null
+        }
+    });
     const [selectedProducts, selectedProductList] = useState(null);
 
     useEffect(() => {
@@ -63,24 +73,26 @@ export default function Home() {
     }, [token]); // Wird erneut ausgeführt, wenn sich `token` ändert
 
 
-    const getHardwareData = async (hardware, apiFunction, token, filterValues) => {
+    const getHardwareData = async (hardware, apiFunction, token, filterValues, category, subCategory) => {
         const baseUrl = "http://80.75.218.175:8080/api/";
         const url = new URL(`${baseUrl}${hardware}${apiFunction}${token}${filterValues}`);
-        setFilterValues(filterValues);
-
-        if (filterValues == activeFilter) {
-            return;
-        }
 
         try {
-            const response = await fetch(
-                url.toString()
-            );
+            const response = await fetch(url.toString());
             if (!response.ok) {
                 throw new Error("Fehler beim Abrufen der Daten");
             }
             const data = await response.json();
-            setHardwareData(data); // Speichert die Daten im State
+            
+            // Update nur die spezifische Kategorie und Unterkategorie
+            setHardwareStates(prevState => ({
+                ...prevState,
+                [category]: {
+                    ...prevState[category],
+                    [subCategory]: data
+                }
+            }));
+            
             console.log("Hardware-Daten:", data);
         } catch (error) {
             console.error("API Fehler:", error);
@@ -122,7 +134,14 @@ export default function Home() {
                                         {/* ATX */}
                                         <div className="card mb-2">
                                             <div
-                                                onClick={() => getHardwareData("tower/", "GetTowerByFormFactor?", "token=" + token, "&formFactor=ATX")}
+                                                onClick={() => getHardwareData(
+                                                    "tower/", 
+                                                    "GetTowerByFormFactor?", 
+                                                    "token=" + token, 
+                                                    "&formFactor=ATX",
+                                                    "tower",
+                                                    "ATX"
+                                                )}
                                                 className="card-header" data-bs-toggle="collapse"
                                                 data-bs-target="#collapseATX"
                                                 style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
@@ -130,14 +149,26 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseATX">
                                                 <div className="card-body">
-                                                    <TowerCard data={hardwareData} token={token} setData={selectedProductList} />
+                                                    <TowerCard 
+                                                        data={hardwareStates.tower.ATX} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Micro ATX */}
                                         <div className="card mb-2">
-                                            <div onClick={() => getHardwareData("tower/", "GetTowerByFormFactor?", "token=" + token, "&formFactor=MICRO_ATX")}
+                                            <div 
+                                                onClick={() => getHardwareData(
+                                                    "tower/", 
+                                                    "GetTowerByFormFactor?", 
+                                                    "token=" + token, 
+                                                    "&formFactor=MICRO_ATX",
+                                                    "tower",
+                                                    "MICRO_ATX"
+                                                )}
                                                 className="card-header" data-bs-toggle="collapse"
                                                 data-bs-target="#collapseMicroATX"
                                                 style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
@@ -145,14 +176,26 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseMicroATX">
                                                 <div className="card-body">
-                                                    <TowerCard data={hardwareData} token={token} setData={selectedProductList} />
+                                                    <TowerCard 
+                                                        data={hardwareStates.tower.MICRO_ATX} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Mini ATX */}
                                         <div className="card">
-                                            <div onClick={() => getHardwareData("tower/", "GetTowerByFormFactor?", "token=" + token, "&formFactor=MINI_ATX")}
+                                            <div 
+                                                onClick={() => getHardwareData(
+                                                    "tower/", 
+                                                    "GetTowerByFormFactor?", 
+                                                    "token=" + token, 
+                                                    "&formFactor=MINI_ATX",
+                                                    "tower",
+                                                    "MINI_ATX"
+                                                )}
                                                 className="card-header" data-bs-toggle="collapse"
                                                 data-bs-target="#collapseMiniATX"
                                                 style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
@@ -160,7 +203,11 @@ export default function Home() {
                                             </div>
                                             <div className="collapse" id="collapseMiniATX">
                                                 <div className="card-body">
-                                                    <TowerCard data={hardwareData} token={token} setData={selectedProductList} />
+                                                    <TowerCard 
+                                                        data={hardwareStates.tower.MINI_ATX} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -189,7 +236,29 @@ export default function Home() {
                                 </div>
                                 <div className="collapse" id="collapseCPU">
                                     <div className="card-body">
-
+                                        <div className="card">
+                                            <div 
+                                                onClick={() => getHardwareData(
+                                                    "cpu/", 
+                                                    "GetAll?", 
+                                                    "token=" + token
+                                                )}
+                                                className="card-header" 
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapseIntelCPU"
+                                                style={{ borderRadius: "5px", borderColor: "lightgrey" }}>
+                                                Intel CPU
+                                            </div>
+                                            <div className="collapse" id="collapseIntelCPU">
+                                                <div className="card-body">
+                                                    <CPUCard 
+                                                        data={hardwareStates.cpu.INTEL} 
+                                                        token={token} 
+                                                        setData={selectedProductList} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
