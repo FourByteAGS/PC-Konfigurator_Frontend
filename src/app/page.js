@@ -13,7 +13,7 @@ import MotherboardCard from "./components/MotherboardCard.js";
 import CPUCoolerCard from "./components/CPUCoolerCard";
 import GPUCard from "./components/GPUCard";
 import StorageCard from "./components/DatenträgerCard";
-import FanCard from "./components/CPUCoolerCard";
+import FanCard from "./components/GehäuselüfterCard";
 import PowerSupplyCard from "./components/PowerCard";
 import RAMCard from "./components/RAMCard";
 
