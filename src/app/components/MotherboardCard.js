@@ -35,7 +35,7 @@ const MotherboardCard = ({ data, token }) => {
     setSelectedId(newSelectedId);
 
     if (newSelectedId) {
-      await selectedCPU(
+      await selectedMotherboard(
         "mainboard/",
         "setcomponent?",
         "token=" + token,
