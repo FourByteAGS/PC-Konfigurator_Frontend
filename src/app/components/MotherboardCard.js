@@ -24,7 +24,7 @@ const selectedMotherboard = async (
   }
 };
 
-const MotherboardCard = ({ data, token, setData }) => {
+const MotherboardCard = ({ data, token, setData, onSelect }) => {
   const [selectedId, setSelectedId] = useState(null);
 
   if (!data || data.length === 0) {
@@ -42,6 +42,9 @@ const MotherboardCard = ({ data, token, setData }) => {
         "token=" + token,
         "&componentId=" + id
       );
+      onSelect(true);
+    } else {
+      onSelect(false);
     }
 
     // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren

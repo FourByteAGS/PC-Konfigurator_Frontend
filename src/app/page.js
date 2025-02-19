@@ -55,6 +55,17 @@ export default function Home() {
     },
   });
   const [selectedProducts, selectedProductList] = useState(null);
+  const [selectedComponents, setSelectedComponents] = useState({
+    tower: false,
+    cpu: false,
+    mainboard: false,
+    cpuCooler: false,
+    gpu: false,
+    storage: false,
+    ram: false,
+    fan: false,
+    powerSupply: false
+  });
 
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -137,6 +148,13 @@ export default function Home() {
 
   console.log("GAY ", hardwareStates);
 
+  const updateSelectedComponent = (componentType, isSelected) => {
+    setSelectedComponents(prev => ({
+      ...prev,
+      [componentType]: isSelected
+    }));
+  };
+
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-center">
@@ -202,6 +220,7 @@ export default function Home() {
                             data={hardwareStates.tower.ATX}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('tower', isSelected)}
                           />
                         </div>
                       </div>
@@ -236,6 +255,7 @@ export default function Home() {
                             data={hardwareStates.tower.MICRO_ATX}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('tower', isSelected)}
                           />
                         </div>
                       </div>
@@ -270,6 +290,7 @@ export default function Home() {
                             data={hardwareStates.tower.MINI_ATX}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('tower', isSelected)}
                           />
                         </div>
                       </div>
@@ -284,7 +305,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseCPU"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.tower ? 'auto' : 'none',
+                    opacity: selectedComponents.tower ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -335,6 +361,7 @@ export default function Home() {
                             data={hardwareStates.cpu.INTEL}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('cpu', isSelected)}
                           />
                         </div>
                       </div>
@@ -369,6 +396,7 @@ export default function Home() {
                             data={hardwareStates.cpu.AMD}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('cpu', isSelected)}
                           />
                         </div>
                       </div>
@@ -383,7 +411,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseMainboard"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.cpu ? 'auto' : 'none',
+                    opacity: selectedComponents.cpu ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -422,6 +455,7 @@ export default function Home() {
                       data={hardwareStates.mainboard.motherboard}
                       token={token}
                       setData={selectedProductList}
+                      onSelect={(isSelected) => updateSelectedComponent('mainboard', isSelected)}
                     />
                   </div>
                 </div>
@@ -433,7 +467,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseCPUCooler"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.mainboard ? 'auto' : 'none',
+                    opacity: selectedComponents.mainboard ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -484,6 +523,7 @@ export default function Home() {
                             data={hardwareStates.cpuCooler.AIR}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('cpuCooler', isSelected)}
                           />
                         </div>
                       </div>
@@ -519,6 +559,7 @@ export default function Home() {
                             data={hardwareStates.cpuCooler.WATER}
                             token={token}
                             setData={selectedProductList}
+                            onSelect={(isSelected) => updateSelectedComponent('cpuCooler', isSelected)}
                           />
                         </div>
                       </div>
@@ -533,7 +574,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseRAM"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.cpuCooler ? 'auto' : 'none',
+                    opacity: selectedComponents.cpuCooler ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -571,6 +617,7 @@ export default function Home() {
                       data={hardwareStates.ram.DDR}
                       token={token}
                       setData={selectedProductList}
+                      onSelect={(isSelected) => updateSelectedComponent('ram', isSelected)}
                     />
                   </div>
                 </div>
@@ -582,7 +629,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseGPU"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.ram ? 'auto' : 'none',
+                    opacity: selectedComponents.ram ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -623,6 +675,7 @@ export default function Home() {
                         data={hardwareStates.gpu.GPU}
                         token={token}
                         setData={selectedProductList}
+                        onSelect={(isSelected) => updateSelectedComponent('gpu', isSelected)}
                       />
                     </div>
                   </div>
@@ -635,7 +688,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseDatadrive"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.gpu ? 'auto' : 'none',
+                    opacity: selectedComponents.gpu ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -676,6 +734,7 @@ export default function Home() {
                         data={hardwareStates.storage.SSD}
                         token={token}
                         setData={selectedProductList}
+                        onSelect={(isSelected) => updateSelectedComponent('storage', isSelected)}
                       />
                     </div>
                   </div>
@@ -688,7 +747,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseFan"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.storage ? 'auto' : 'none',
+                    opacity: selectedComponents.storage ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -728,6 +792,7 @@ export default function Home() {
                         data={hardwareStates.fan.ALL}
                         token={token}
                         setData={selectedProductList}
+                        onSelect={(isSelected) => updateSelectedComponent('fan', isSelected)}
                       />
                     </div>
                   </div>
@@ -740,7 +805,12 @@ export default function Home() {
                   className="card-header"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapsePower"
-                  style={{ borderRadius: "5px", borderColor: "lightgrey" }}
+                  style={{
+                    borderRadius: "5px",
+                    borderColor: "lightgrey",
+                    pointerEvents: selectedComponents.fan ? 'auto' : 'none',
+                    opacity: selectedComponents.fan ? 1 : 0.5
+                  }}
                 >
                   <div className="row">
                     <div className="col-1 border-end d-flex justify-content-center align-items-center">
@@ -779,6 +849,7 @@ export default function Home() {
                         data={hardwareStates.powerSupply.ALL}
                         token={token}
                         setData={selectedProductList}
+                        onSelect={(isSelected) => updateSelectedComponent('powerSupply', isSelected)}
                       />
                     </div>
                   </div>

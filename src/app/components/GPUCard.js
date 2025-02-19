@@ -19,7 +19,7 @@ const selectedGPU = async (hardware, apiFunction, token, filterValues) => {
   }
 };
 
-const GPUCard = ({ data, token, setData }) => {
+const GPUCard = ({ data, token, setData, onSelect }) => {
   const [selectedId, setSelectedId] = useState(null);
 
   if (!data || data.length === 0) {
@@ -37,6 +37,9 @@ const GPUCard = ({ data, token, setData }) => {
         "token=" + token,
         "&componentId=" + id
       );
+      onSelect(true);
+    } else {
+      onSelect(false);
     }
     // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren
     const updatedProducts = await getSelectedProducts(token);

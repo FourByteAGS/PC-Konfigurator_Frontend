@@ -17,7 +17,7 @@ const selectedTower = async (hardware, apiFunction, token, filterValues) => {
     }
 };
 
-const TowerCard = ({ data, token, setData }) => {
+const TowerCard = ({ data, token, setData, onSelect }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     if (!data || data.length === 0) {
@@ -30,11 +30,12 @@ const TowerCard = ({ data, token, setData }) => {
 
         if (newSelectedId) {
             await selectedTower("tower/", "setcomponent", token, "&componentId=" + id);
+            onSelect(true);
+        } else {
+            onSelect(false);
         }
 
-        // `getSelectedProducts` aus apiService aufrufen und den State aktualisieren
         const updatedProducts = await getSelectedProducts(token);
-
         if (typeof setData === "function") {
             setData(updatedProducts);
         } else {
